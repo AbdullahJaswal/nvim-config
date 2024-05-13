@@ -14,7 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({ { import = "primary.plugins" }, { import = "primary.plugins.lsp" } }, {
   install = {
-    colorscheme = { "spaceduck" },
+    colorscheme = { "gruv-vsassist" },
   },
   checker = {
     enabled = true,

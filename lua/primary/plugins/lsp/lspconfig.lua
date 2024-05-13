@@ -94,6 +94,33 @@ return {
     lspconfig["rust_analyzer"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
+      settings = {
+        ['rust-analyzer'] = {
+          diagnostics = {
+            disabled = {
+              "unresolved_proc_macro",
+            },
+          },
+        },
+      },
+    })
+
+    -- configure java server
+    lspconfig["java_language_server"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    -- configure yaml server
+    lspconfig["yamlls"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    -- configure sql server
+    lspconfig["sqlls"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
     })
 
     -- configure lua server (with special settings)

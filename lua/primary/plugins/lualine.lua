@@ -7,7 +7,7 @@ return {
 
     lualine.setup({
       options = {
-        theme = 'spaceduck',
+        theme = 'gruv-vsassist',
         section_separators = { '', '' },
         component_separators = { '', '' },
         icons_enabled = true,
