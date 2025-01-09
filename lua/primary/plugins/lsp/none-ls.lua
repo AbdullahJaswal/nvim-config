@@ -7,11 +7,10 @@ return {
   },
   config = function()
     local mason_null_ls = require("mason-null-ls")
-
     local null_ls = require("null-ls")
-
     local null_ls_utils = require("null-ls.utils")
 
+    -- ensure the required tools are installed
     mason_null_ls.setup({
       ensure_installed = {
         "prettier", -- prettier formatter
@@ -19,6 +18,14 @@ return {
         "black", -- python formatter
         "pylint", -- python linter
         "eslint_d", -- js linter
+
+        -- Swift tools
+        "swiftformat", -- swift formatter
+        "swiftlint", -- swift linter
+
+        -- SQL tools
+        "sql-formatter", -- SQL formatter
+        "sqlfluff", -- SQL linter and formatter
       },
     })
 
@@ -41,14 +48,20 @@ return {
           extra_filetypes = { "svelte" },
         }), -- js/ts formatter
         formatting.stylua, -- lua formatter
-        formatting.isort,
-        formatting.black,
-        diagnostics.pylint,
+        formatting.isort, -- python formatter
+        formatting.black, -- python formatter
+        diagnostics.pylint.with({
+          prefer_local = ".venv/bin",
+        }), -- python linter
         diagnostics.eslint_d.with({ -- js/ts linter
           condition = function(utils)
             return utils.root_has_file({ ".eslintrc.js", ".eslintrc.cjs" }) -- only enable if root has .eslintrc.js or .eslintrc.cjs
           end,
         }),
+
+        -- Swift tools
+        formatting.swiftformat, -- Swift formatter
+        diagnostics.swiftlint,  -- Swift linter
       },
       -- configure format on save
       on_attach = function(current_client, bufnr)
@@ -60,7 +73,7 @@ return {
             callback = function()
               vim.lsp.buf.format({
                 filter = function(client)
-                  --  only use null-ls for formatting instead of lsp server
+                  -- only use null-ls for formatting instead of lsp server
                   return client.name == "null-ls"
                 end,
                 bufnr = bufnr,
@@ -68,6 +81,19 @@ return {
             end,
           })
         end
+      end,
+    })
+
+    -- autoformat specifically for Swift files
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      pattern = "*.swift",
+      callback = function()
+        vim.lsp.buf.format({
+          filter = function(client)
+            return client.name == "null-ls"
+          end,
+          bufnr = vim.api.nvim_get_current_buf(),
+        })
       end,
     })
   end,

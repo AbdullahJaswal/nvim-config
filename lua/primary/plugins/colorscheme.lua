@@ -1,25 +1,91 @@
 return {
+  
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function(_, opts)
+  --       vim.opt.termguicolors = true
+
+  --       vim.cmd [[colorscheme tokyonight-night]]
+
+  --       -- Set background transparency
+  --       -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
+  --       -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
+  --   end,
+  -- },
   {
-      "bartekprtc/gruv-vsassist.nvim",
-      lazy = false,
-      priority = 1000,
-      config = function(_, opts)
-          vim.opt.termguicolors = true
+    "Shatur/neovim-ayu",
+    lazy = false,
+    priority = 1000,
+    config = function(_, opts)
+        vim.opt.termguicolors = true
 
-          vim.cmd [[colorscheme gruv-vsassist]]
+        vim.cmd [[colorscheme ayu-dark]]
 
-          -- Applying color overrides
-          require('gruv-vsassist').setup({
-            color_overrides = {
-                vscBack = '#101010',
-            },
-          })
-
-          -- Set background transparency
-          -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
-          -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
-      end,
+        -- Set background transparency
+        -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
+        -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
+    end,
   },
+  -- {
+  --     "tiagovla/tokyodark.nvim",
+  --     lazy = false,
+  --     priority = 1000,
+  --     config = function(_, opts)
+  --         vim.opt.termguicolors = true
+
+  --         vim.cmd [[colorscheme tokyodark]]
+
+  --         -- Turn off italics
+  --         vim.cmd [[
+  --             highlight Comment cterm=NONE gui=NONE
+  --             highlight Keyword cterm=NONE gui=NONE
+  --             highlight Type cterm=NONE gui=NONE
+  --             highlight Function cterm=NONE gui=NONE
+  --             highlight Statement cterm=NONE gui=NONE
+  --         ]]
+
+  --         -- Set background transparency
+  --         -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
+  --         -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
+  --     end,
+  -- },
+  -- {
+  --     "hachy/eva01.vim",
+  --     lazy = false,
+  --     priority = 1000,
+  --     config = function(_, opts)
+  --         vim.opt.termguicolors = true
+
+  --         vim.cmd [[colorscheme eva01]]
+
+  --         -- Set background transparency
+  --         vim.cmd [[highlight Normal ctermbg=none guibg=none]]
+  --         vim.cmd [[highlight NonText ctermbg=none guibg=none]]
+  --     end,
+  -- },
+  -- {
+  --     "bartekprtc/gruv-vsassist.nvim",
+  --     lazy = false,
+  --     priority = 1000,
+  --     config = function(_, opts)
+  --         vim.opt.termguicolors = true
+
+  --         vim.cmd [[colorscheme gruv-vsassist]]
+
+  --         -- Applying color overrides
+  --         require('gruv-vsassist').setup({
+  --           color_overrides = {
+  --               vscBack = '#101010',
+  --           },
+  --         })
+
+  --         -- Set background transparency
+  --         -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
+  --         -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
+  --     end,
+  -- },
   -- {
   --     "dasupradyumna/midnight.nvim",
   --     lazy = false,
@@ -35,27 +101,13 @@ return {
   --     end,
   -- },
   -- {
-  --   "folke/tokyonight.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function(_, opts)
-  --       vim.opt.termguicolors = true
-
-  --       vim.cmd [[colorscheme tokyonight-night]]
-
-  --       -- Set background transparency
-  --       -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
-  --       -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
-  --   end,
-  -- },
-  -- {
   --     "notken12/base46-colors",
   --     lazy = false,
   --     priority = 1000,
   --     config = function(_, opts)
   --         vim.opt.termguicolors = true
 
-  --         vim.cmd [[colorscheme radium]]
+  --         vim.cmd [[colorscheme tokyodark]]
 
   --         -- Set background transparency
   --         vim.cmd [[highlight Normal ctermbg=none guibg=none]]

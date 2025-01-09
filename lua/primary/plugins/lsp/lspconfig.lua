@@ -22,6 +22,8 @@ return {
     -- used to enable autocompletion (assign to every lsp server config)
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
+    local util = require("lspconfig.util")
+
     -- Change the Diagnostic symbols in the sign column (gutter)
     -- (not in youtube nvim video)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
@@ -37,7 +39,7 @@ return {
     })
 
     -- configure typescript server with plugin
-    lspconfig["tsserver"].setup({
+    lspconfig["ts_ls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
@@ -82,10 +84,10 @@ return {
     lspconfig["volar"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
-      filetypes = {"vue"},
+      filetypes = { "vue" },
       init_options = {
         typescript = {
-          tsdk = '/usr/local/lib/node_modules/typescript/lib'
+          tsdk = "/usr/local/lib/node_modules/typescript/lib",
         },
       },
     })
@@ -95,7 +97,7 @@ return {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = {
-        ['rust-analyzer'] = {
+        ["rust-analyzer"] = {
           diagnostics = {
             disabled = {
               "unresolved_proc_macro",
@@ -117,8 +119,36 @@ return {
       on_attach = on_attach,
     })
 
-    -- configure sql server
-    lspconfig["sqlls"].setup({
+    -- configure svelte server
+    lspconfig["svelte"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    -- Set filetype for `.compose.yaml` files
+    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+      pattern = "*.compose.yaml",
+      callback = function()
+        vim.bo.filetype = "yaml.docker-compose"
+      end,
+    })
+
+    -- configure docker compose server
+    lspconfig["docker_compose_language_service"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      filetypes = { "yaml.docker-compose" },
+      single_file_support = true,
+    })
+
+    -- configure dockerfile server
+    lspconfig["dockerls"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    -- configure terraform server
+    lspconfig["terraformls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
@@ -142,6 +172,49 @@ return {
           },
         },
       },
+    })
+
+    -- Configure Swift LSP (sourcekit)
+    lspconfig["sourcekit"].setup({
+      capabilities = capabilities, -- Inherit capabilities from your LSP setup (e.g., autocompletion support)
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr) -- Call the common on_attach function
+        -- You can define Swift-specific keybindings or setup here
+        -- For example, setting up keymaps for Swift:
+        local bufopts = { noremap = true, silent = true, buffer = bufnr }
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
+      end,
+      filetypes = { "swift", "objective-c", "objective-cpp" }, -- List of file types for which sourcekit should be active
+
+      root_dir = function(fname)
+        return lspconfig.util.root_pattern("Package.swift", "*.xcodeproj", ".git")(fname)
+          or lspconfig.util.path.dirname(fname)
+      end,
+
+      settings = {
+        -- You can add any specific sourcekit settings here, although sourcekit-lsp doesn't have many configurable options.
+        -- For example, you could set completion preferences, diagnostics, or any other LSP behavior if necessary.
+      },
+      single_file_support = true, -- Enable support for single Swift files outside a project
+    })
+
+    -- Configure clangd server
+    lspconfig["clangd"].setup({
+      cmd = { "clangd", "--clang-tidy" }, -- Specify the command with additional arguments
+      capabilities = capabilities, -- Inherit capabilities from your LSP setup
+      on_attach = on_attach, -- Call the common on_attach function
+    })
+
+    -- configure sql server
+    lspconfig["sqlls"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      filetypes = { "sql", "mysql", "psql" },
+      root_dir = function(_)
+        return vim.loop.cwd()
+      end,
     })
   end,
 }
