@@ -123,6 +123,7 @@ return {
     lspconfig["svelte"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
+      filetypes = { "typescript", "javascript", "svelte", "html", "css" },
     })
 
     -- Set filetype for `.compose.yaml` files

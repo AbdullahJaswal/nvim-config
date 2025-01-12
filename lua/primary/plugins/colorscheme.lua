@@ -1,5 +1,5 @@
 return {
-  
+
   -- {
   --   "folke/tokyonight.nvim",
   --   lazy = false,
@@ -19,13 +19,13 @@ return {
     lazy = false,
     priority = 1000,
     config = function(_, opts)
-        vim.opt.termguicolors = true
+      vim.opt.termguicolors = true
 
-        vim.cmd [[colorscheme ayu-dark]]
+      vim.cmd("colorscheme ayu-dark")
 
-        -- Set background transparency
-        -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
-        -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
+      -- Set background transparency
+      -- vim.cmd [[highlight Normal ctermbg=none guibg=none]]
+      -- vim.cmd [[highlight NonText ctermbg=none guibg=none]]
     end,
   },
   -- {
