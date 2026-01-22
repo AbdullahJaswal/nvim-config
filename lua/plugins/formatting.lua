@@ -1,8 +1,9 @@
 -- ~/.config/nvim/lua/plugins/formatting.lua
 return {
   "stevearc/conform.nvim",
-  event = { "BufWritePre" },
+  event = { "BufWritePre" }, -- Only load when saving (already optimal)
   cmd = { "ConformInfo" },
+  lazy = true, -- Ensure it's lazy loaded
   keys = {
     {
       "<leader>cf",

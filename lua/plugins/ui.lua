@@ -1,22 +1,19 @@
 -- ~/.config/nvim/lua/plugins/ui.lua
 return {
-  -- Theme: Tokyo Night
+  -- Theme: Moonfly
   {
-    "folke/tokyonight.nvim",
+    "bluz71/vim-moonfly-colors",
+    name = "moonfly",
     lazy = false,
     priority = 1000,
-    opts = {
-      style = "night",
-      light_style = "day",
-      transparent = false,
-      terminal_colors = true,
-      styles = {
-        comments = { italic = true },
-        keywords = { italic = true },
-      },
-    },
-    config = function(_, opts)
-      require("tokyonight").setup(opts)
+    config = function()
+      -- Moonfly theme options (set before colorscheme loads)
+      vim.g.moonflyItalics = true
+      vim.g.moonflyNormalFloat = true
+      vim.g.moonflyTerminalColors = true
+      vim.g.moonflyTransparent = false
+      vim.g.moonflyUndercurls = true
+      vim.g.moonflyUnderlineMatchParen = true
     end,
   },
 
@@ -29,11 +26,11 @@ return {
       update_interval = 1000,
       set_dark_mode = function()
         vim.opt.background = "dark"
-        vim.cmd.colorscheme("tokyonight-night")
+        vim.cmd.colorscheme("moonfly")
       end,
       set_light_mode = function()
         vim.opt.background = "light"
-        vim.cmd.colorscheme("tokyonight-day")
+        vim.cmd.colorscheme("moonfly")
       end,
     },
   },
@@ -46,22 +43,39 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function()
-      -- Custom component to show active LSP clients
+      -- Cached LSP component (only updates when LSP attach/detach)
+      local lsp_cache = {}
+      vim.api.nvim_create_autocmd({ "LspAttach", "LspDetach" }, {
+        callback = function(args)
+          lsp_cache[args.buf] = nil -- Invalidate cache
+        end,
+      })
+
       local function lsp_clients()
-        local clients = vim.lsp.get_clients({ bufnr = 0 })
+        local buf = vim.api.nvim_get_current_buf()
+        if lsp_cache[buf] then
+          return lsp_cache[buf]
+        end
+
+        local clients = vim.lsp.get_clients({ bufnr = buf })
         if #clients == 0 then
+          lsp_cache[buf] = ""
           return ""
         end
+
         local names = {}
         for _, client in ipairs(clients) do
           table.insert(names, client.name)
         end
-        return " " .. table.concat(names, ", ")
+
+        local result = " " .. table.concat(names, ", ")
+        lsp_cache[buf] = result
+        return result
       end
 
       return {
         options = {
-          theme = "auto",
+          theme = "moonfly",
           globalstatus = true,
           component_separators = "",
           section_separators = "",
@@ -88,7 +102,7 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "VeryLazy", -- Defer loading (visual enhancement only)
     opts = {
       indent = { char = "│" },
       scope = { enabled = false },

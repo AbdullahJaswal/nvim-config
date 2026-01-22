@@ -4,7 +4,7 @@ return {
   -- Gitsigns: Inline git diff signs, blame, hunk navigation
   {
     "lewis6991/gitsigns.nvim",
-    event = { "BufReadPre", "BufNewFile" },
+    event = { "BufReadPost" }, -- Load after file is displayed, not before
     opts = {
       signs = {
         add = { text = "▎" },
@@ -19,6 +19,12 @@ return {
       current_line_blame_opts = {
         delay = 300,
       },
+      -- Performance optimizations
+      watch_gitdir = {
+        interval = 1000, -- Check git changes every 1s instead of constantly
+        follow_files = true,
+      },
+      update_debounce = 200, -- Debounce updates by 200ms
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
         local map = function(mode, l, r, desc)

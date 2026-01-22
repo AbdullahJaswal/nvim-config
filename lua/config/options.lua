@@ -8,7 +8,6 @@ opt.relativenumber = true
 opt.signcolumn = "yes"
 opt.cursorline = true
 opt.scrolloff = 8
-opt.updatetime = 250
 opt.laststatus = 3
 opt.showmode = false
 
@@ -33,6 +32,9 @@ opt.splitbelow = true
 
 -- Performance
 opt.timeoutlen = 300
+opt.updatetime = 250 -- Faster CursorHold events (affects LSP, git signs, etc.)
+opt.redrawtime = 10000 -- Allow more time for redrawing
+opt.lazyredraw = false -- Don't use lazyredraw, it can cause issues with modern plugins
 
 -- Remove padding/margins
 opt.fillchars = { eob = " " } -- Hide ~ on empty lines

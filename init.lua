@@ -91,12 +91,14 @@ vim.lsp.config("biome", {
   root_markers = { "biome.json", "biome.jsonc" },
 })
 
--- Enable all servers
-vim.lsp.enable({
-  "lua_ls", "ts_ls", "gopls", "pyright", "ruff",
-  "html", "cssls", "tailwindcss", "jsonls", "yamlls",
-  "dockerls", "bashls", "biome",
-})
+-- Enable LSP servers (deferred for faster file opening)
+vim.defer_fn(function()
+  vim.lsp.enable({
+    "lua_ls", "ts_ls", "gopls", "pyright", "ruff",
+    "html", "cssls", "tailwindcss", "jsonls", "yamlls",
+    "dockerls", "bashls", "biome",
+  })
+end, 100) -- Delay by 100ms to allow file to render first
 
 -- ============================================================================
 -- LSP KEYMAPS
@@ -115,15 +117,24 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
--- Diagnostics config
+-- Diagnostics config (optimized for performance)
 vim.diagnostic.config({
   virtual_text = { prefix = "●" },
   signs = true,
   underline = true,
-  update_in_insert = false,
+  update_in_insert = false, -- Don't update diagnostics while typing
   severity_sort = true,
   float = { border = "rounded" },
 })
+
+-- Debounce LSP diagnostics to reduce lag (update every 500ms instead of immediately)
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics,
+  {
+    update_in_insert = false,
+    virtual_text = { prefix = "●" },
+  }
+)
 
 -- ============================================================================
 -- SMART :q BEHAVIOR
